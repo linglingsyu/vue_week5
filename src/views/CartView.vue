@@ -3,7 +3,13 @@
     <div class="mt-4">
       <h1>我的購物車列表</h1>
       <div class="text-end">
-        <button class="btn btn-outline-danger" type="button">清空購物車</button>
+        <button
+          class="btn btn-outline-danger"
+          type="button"
+          @click="clearCart(null)"
+        >
+          清空購物車
+        </button>
       </div>
       <table class="table align-middle">
         <thead>
@@ -15,10 +21,14 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="true">
-            <tr v-for="cart in carts">
+          <template v-if="tempProduct">
+            <tr v-for="cart in tempProduct">
               <td>
-                <button type="button" class="btn btn-outline-danger btn-sm">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  @click="clearCart(cart.id)"
+                >
                   <i class="fas fa-spinner fa-pulse"></i>
                   x
                 </button>
@@ -30,14 +40,22 @@
               <td>
                 <div class="input-group input-group-sm">
                   <div class="input-group mb-3">
-                    <input min="1" type="number" class="form-control" />
-                    <span class="input-group-text" id="basic-addon2">{{}}</span>
+                    <input
+                      min="1"
+                      type="number"
+                      class="form-control"
+                      v-model="cart.qty"
+                    />
+                    <span class="input-group-text" id="basic-addon2">{{
+                      cart.product.unit
+                    }}</span>
                   </div>
                 </div>
               </td>
-              <td class="text-end">
-                <small class="text-success">折扣價：</small>
+              <td class="">
                 {{ cart.product.price }}
+                <small class="text-success">折扣價：</small>
+                {{ cart.qty * cart.product.price }}
               </td>
             </tr>
           </template>
@@ -45,14 +63,17 @@
         <tfoot>
           <tr>
             <td colspan="3" class="text-end">總計</td>
-            <td class="text-end">{{}}</td>
+            <td class="text-end">{{ getTotal }}</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td colspan="3" class="text-end text-success">折扣價</td>
             <td class="text-end text-success">{{}}</td>
-          </tr>
+          </tr> -->
         </tfoot>
       </table>
+      <div class="text-end">
+        <button class="btn btn-outline-danger" type="button">送出訂單</button>
+      </div>
     </div>
   </div>
 </template>
@@ -72,11 +93,30 @@ export default {
   },
 
   methods: {
-    ...mapActions(cartStore, ['getCartList']),
+    ...mapActions(cartStore, ['getCartList', 'delOneCart', 'delAllCart']),
+    clearCart(id) {
+      if (id !== null) {
+        this.delOneCart(id)
+      } else {
+        // delete all
+        this.delAllCart()
+      }
+    },
   },
   computed: {
     ...mapState(cartStore, ['carts']),
+    getTotal() {
+      return this.carts.reduce((prev, current) => {
+        prev += current.product.price * current.qty
+        console.log(prev)
+        return prev
+      }, 0)
+    },
   },
-  watch: {},
+  watch: {
+    carts() {
+      this.tempProduct = this.carts
+    },
+  },
 }
 </script>

@@ -21,10 +21,7 @@
             <a class="nav-link" href="#">產品列表</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">我的購物車</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-outline-danger btn-sm" href="#">結帳</a>
+            <a class="nav-link" href="#">我的購物車/結帳</a>
           </li>
         </ul>
       </div>

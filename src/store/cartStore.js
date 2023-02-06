@@ -38,8 +38,9 @@ export default defineStore('cartStore', {
     },
     async delOneCart(id) {
       try {
-        const path = `​/api​/${api_path}​/cart​/${id}`
+        const path = `/api/${api_path}/cart/${id}`
         const res = await API.delete(path)
+        await this.getCartList()
         return res
       } catch (error) {
         console.dir(error)
@@ -48,8 +49,9 @@ export default defineStore('cartStore', {
     },
     async delAllCart() {
       try {
-        const path = `/api​/${api_path}​/carts`
+        const path = `/api/${api_path}/carts`
         const res = await API.delete(path)
+        await this.getCartList()
         return res
       } catch (error) {
         console.dir(error)
