@@ -1,4 +1,6 @@
 <template>
+  <loading :active="isLoading" />
+
   <div class="container">
     <div class="mt-4">
       <h1>精選產品</h1>
@@ -29,10 +31,10 @@
               <a
                 href="#"
                 class="btn btn-outline-primary mx-2"
-                @click="addCart(product.id)"
+                @click.prevent="addCart(product.id)"
                 >加入購物車</a
               >
-              <a href="#" class="btn btn-outline-danger">直接購買</a>
+              <!-- <a href="#" class="btn btn-outline-danger">直接購買</a> -->
             </div>
           </div>
         </div>
@@ -126,6 +128,7 @@ export default {
   },
   mounted() {
     this.getProductList()
+    console.log(this.isLoading)
   },
   components: {
     productModal,
@@ -152,7 +155,8 @@ export default {
     },
   },
   computed: {
-    ...mapState(productStore, ['products']),
+    ...mapState(productStore, ['products', 'isLoading']),
+    ...mapState(cartStore, ['isLoading']),
   },
   watch: {},
 }

@@ -71,10 +71,9 @@
                   >
                   <div class="col-3">
                     <input
+                      v-model.number="qty"
                       type="number"
                       class="form-control form-control-sm"
-                      value="1"
-                      id="qty"
                       min="1"
                     />
                   </div>
@@ -97,7 +96,7 @@
                 </div>
               </div>
               <div class="mb-3">
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" @click="addCart">
                   加入購物車
                 </button>
               </div>
@@ -111,7 +110,7 @@
 
 <script>
 import { mapActions } from 'pinia'
-import productStore from '@/store/productStore.js'
+import cartStore from '@/store/cartStore.js'
 import { Modal } from 'bootstrap'
 export default {
   name: 'productModal',
@@ -120,6 +119,7 @@ export default {
   },
   data() {
     return {
+      qty: 1,
       product: {
         stock: '',
         title: '',
@@ -138,30 +138,19 @@ export default {
   },
   props: ['productData'],
   methods: {
-    ...mapActions(productStore, ['updateProduct', 'upload']),
+    ...mapActions(cartStore, ['updateCart']),
     openModal() {
       this.product = { ...this.productData }
       this.productModal.show()
     },
-    async submitHandler() {
-      const res = await this.updateProduct(this.action, this.product)
-      if (res.status === 200) {
-        this.productModal.hide()
+    async addCart() {
+      const data = {
+        product_id: this.product.id,
+        qty: this.qty,
       }
-    },
-    fileChange(e) {
-      this.file = e.target.files[0]
-    },
-    async uploadImage() {
-      if (!this.file) return false
-      const formData = new FormData()
-      formData.append('file-to-upload', this.file)
-      const res = await this.upload(formData)
-      if (res.data.success) {
-        this.product.image = res.data.imageUrl
-      } else {
-        alert(res.data.message)
-      }
+      const res = await this.updateCart(data)
+      this.productModal.hide()
+      alert(res.data.message)
     },
   },
   watch: {
@@ -170,6 +159,7 @@ export default {
       if (!this.product.imagesUrl) {
         this.product.imagesUrl = []
       }
+      this.qty = 1
     },
   },
 }

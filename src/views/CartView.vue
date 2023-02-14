@@ -72,7 +72,7 @@
         </tfoot>
       </table>
       <div class="text-end">
-        <button class="btn btn-outline-danger" type="button">送出訂單</button>
+        <a href="/vue_week5/order" class="btn btn-outline-danger" >下一步</a>
       </div>
     </div>
   </div>

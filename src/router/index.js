@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import products from '@/views/ProductView.vue'
 import carts from '@/views/CartView.vue'
+import order from '@/views/OrderView.vue'
 const history = createWebHistory('/vue_week5')
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     path: '/carts',
     name: 'carts',
     component: carts,
+  },
+  {
+    path: '/order',
+    name: 'order',
+    component: order,
   },
 ]
 
