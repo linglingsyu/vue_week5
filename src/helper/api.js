@@ -1,4 +1,4 @@
-import 'https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js'
+import axios from 'axios'
 
 const config = {
   baseURL: 'https://vue3-course-api.hexschool.io/v2/',

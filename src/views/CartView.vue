@@ -2,7 +2,7 @@
   <div class="container">
     <div class="mt-4">
       <h1>我的購物車列表</h1>
-      <div class="text-end">
+      <div class="text-end" v-if="tempProduct.length">
         <button
           class="btn btn-outline-danger"
           type="button"
@@ -20,6 +20,7 @@
             <th>單價</th>
           </tr>
         </thead>
+
         <tbody>
           <template v-if="tempProduct">
             <tr v-for="cart in tempProduct">
@@ -45,6 +46,15 @@
                       type="number"
                       class="form-control"
                       v-model="cart.qty"
+                      @change="
+                        updateCart(
+                          {
+                            product_id: cart.product.id,
+                            qty: cart.qty,
+                          },
+                          cart.id
+                        )
+                      "
                     />
                     <span class="input-group-text" id="basic-addon2">{{
                       cart.product.unit
@@ -58,9 +68,12 @@
                 {{ cart.qty * cart.product.price }}
               </td>
             </tr>
+            <tr v-if="!tempProduct.length">
+              <td class="text-center" colspan="4">購物車沒有資料</td>
+            </tr>
           </template>
         </tbody>
-        <tfoot>
+        <tfoot v-if="tempProduct.length">
           <tr>
             <td colspan="3" class="text-end">總計</td>
             <td class="text-end">{{ getTotal }}</td>
@@ -71,8 +84,8 @@
           </tr> -->
         </tfoot>
       </table>
-      <div class="text-end">
-        <a href="/vue_week5/order" class="btn btn-outline-danger" >下一步</a>
+      <div class="text-end" v-if="tempProduct.length">
+        <a href="/vue_week5/order" class="btn btn-outline-danger">下一步</a>
       </div>
     </div>
   </div>
@@ -93,7 +106,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(cartStore, ['getCartList', 'delOneCart', 'delAllCart']),
+    ...mapActions(cartStore, [
+      'getCartList',
+      'delOneCart',
+      'delAllCart',
+      'updateCart',
+    ]),
     clearCart(id) {
       if (id !== null) {
         this.delOneCart(id)

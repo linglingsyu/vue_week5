@@ -24,11 +24,16 @@ export default defineStore('cartStore', {
         alert('error!')
       }
     },
-    async updateCart(data) {
+    async updateCart(data, id = null) {
       try {
         this.Loading = true
         let path = `/api/${api_path}/cart`
-        const res = await API.post(path, { data: data })
+        let method = 'post'
+        if (id) {
+          path = `/api/${api_path}/cart/${id}`
+          method = 'put'
+        }
+        const res = await API[method](path, { data: data })
         await this.getCartList()
         this.Loading = false
         return res

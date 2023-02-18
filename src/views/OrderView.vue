@@ -10,7 +10,9 @@
           v-slot="{ errors }"
         >
           <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+            <label for="email" class="form-label"
+              ><span class="text-danger">*</span> Email</label
+            >
             <v-field
               id="email"
               name="email"
@@ -27,7 +29,9 @@
           </div>
 
           <div class="mb-3">
-            <label for="name" class="form-label">收件人姓名</label>
+            <label for="name" class="form-label"
+              ><span class="text-danger">*</span> 收件人姓名</label
+            >
             <v-field
               id="name"
               name="name"
@@ -42,7 +46,9 @@
           </div>
 
           <div class="mb-3">
-            <label for="tel" class="form-label">收件人電話</label>
+            <label for="tel" class="form-label"
+              ><span class="text-danger">*</span> 收件人電話</label
+            >
             <v-field
               id="tel"
               name="tel"
@@ -51,12 +57,15 @@
               class="form-control"
               :class="{ 'is-invalid': errors['tel'] }"
               placeholder="請輸入電話"
+              :rules="validateTel"
             ></v-field>
             <error-message name="tel" class="invalid-feedback"></error-message>
           </div>
 
           <div class="mb-3">
-            <label for="address" class="form-label">收件人地址</label>
+            <label for="address" class="form-label"
+              ><span class="text-danger">*</span> 收件人地址</label
+            >
             <v-field
               id="address"
               name="address"
@@ -121,7 +130,24 @@ export default {
         alert(res.data.message)
       }
       resetForm()
-      this.message = ""
+      this.message = ''
+    },
+    validateTel(value) {
+      // if the field is empty
+      if (!value) {
+        return '電話為必填'
+      }
+
+      const regex = /[0-9]/i
+      if (!regex.test(value)) {
+        return '必須為0-9'
+      }
+
+      if (value.length > 8) {
+        return '電話長度不得超過8碼'
+      }
+      // All is good
+      return true
     },
   },
   computed: {
